@@ -337,7 +337,11 @@ def answer(parsed, state, df, text):
                  for r in d.itertuples()]
         return ("Items below reorder level" + (f" in {wh}" if wh else "") + " (top 8):\n"
                 + "\n".join(lines) + f"\n\n_Data as of {SNAPSHOT}._")
+       if not product and intent == "unclear" and parsed.get("product"):
+        intent = "stock_lookup"        # AI said "unclear" but a product was named
     if not product and intent == "unclear" and not state.get("last_product"):
+        if wh:
+            return f"Which product would you like me to check in {wh}? For example: *BrightSmile Toothpaste 200g*."
         return ("I'm not sure what you'd like to know. Try asking about a product, e.g. "
                 "*\"Do we have QuickNoodle 70g in Mumbai?\"*")
 
